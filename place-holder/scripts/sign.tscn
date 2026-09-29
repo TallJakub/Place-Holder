@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://c0kjk4ejuan53"]
+
+[ext_resource type="Script" uid="uid://c8wo4ti0kus0q" path="res://scripts/sign.gd" id="1_gtn8c"]
+[ext_resource type="Texture2D" uid="uid://tv8tfwj16ghg" path="res://assets/icon.svg" id="2_foafb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ejki1"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iqkd1"]
+size = Vector2(64, 64)
+
+[node name="Sign" type="StaticBody2D" unique_id=1879635761]
+position = Vector2(100, 300)
+script = ExtResource("1_gtn8c")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1262514388]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_foafb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1700754412]
+shape = SubResource("RectangleShape2D_ejki1")
+
+[node name="InteractZone" type="Area2D" parent="." unique_id=820292039]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractZone" unique_id=962832540]
+shape = SubResource("RectangleShape2D_iqkd1")
