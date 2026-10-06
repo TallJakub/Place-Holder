@@ -12,8 +12,8 @@ func _ready() -> void:
 	layer = 10
 
 	panel = Panel.new()
-	panel.position = Vector2(32, 330)
-	panel.size = Vector2(576, 120)
+	panel.position = Vector2(16, 168)
+	panel.size = Vector2(480, 80)
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color.BLACK
 	style.border_color = Color.WHITE
@@ -22,14 +22,14 @@ func _ready() -> void:
 	add_child(panel)
 
 	label = Label.new()
-	label.position = Vector2(16, 12)
-	label.size = Vector2(544, 96)
+	label.position = Vector2(12, 8)
+	label.size = Vector2(456, 64)
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_font_size_override("font_size", 24)
+	label.add_theme_font_size_override("font_size", 20)
 	panel.add_child(label)
 
 	panel.visible = false
-
+	
 func show_text(new_lines: Array) -> void:
 	lines = new_lines
 	line_index = 0

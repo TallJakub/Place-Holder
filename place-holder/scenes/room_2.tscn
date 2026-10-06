@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://bxcijag4byw5w"]
+
+[ext_resource type="PackedScene" uid="uid://bd7gfpo2h35w6" path="res://scenes/player.tscn" id="1_4et86"]
+[ext_resource type="PackedScene" uid="uid://b2llugsh07f8d" path="res://scenes/door.tscn" id="2_w0ydv"]
+[ext_resource type="Texture2D" uid="uid://c6gm3i2xmt3tc" path="res://assets/Mapa1.png" id="3_4et86"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ejki1"]
+size = Vector2(512, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yqjtg"]
+size = Vector2(32, 256)
+
+[node name="game" type="Node2D" unique_id=1854827738]
+
+[node name="Door" parent="." unique_id=1270175815 instance=ExtResource("2_w0ydv")]
+position = Vector2(8, 128)
+target_room = "uid://ifu2lchu8ada"
+spawn_position = Vector2(456, 128)
+
+[node name="CharacterBody2D" parent="." unique_id=1546951291 instance=ExtResource("1_4et86")]
+position = Vector2(300, 203)
+
+[node name="walls" type="StaticBody2D" parent="." unique_id=406262209]
+
+[node name="Top" type="CollisionShape2D" parent="walls" unique_id=909248659]
+position = Vector2(256, -16)
+rotation = -0.00079176546
+shape = SubResource("RectangleShape2D_ejki1")
+
+[node name="Bottom" type="CollisionShape2D" parent="walls" unique_id=912510729]
+position = Vector2(256, 272)
+shape = SubResource("RectangleShape2D_ejki1")
+
+[node name="Left" type="CollisionShape2D" parent="walls" unique_id=1665826322]
+position = Vector2(-16, 128)
+shape = SubResource("RectangleShape2D_yqjtg")
+
+[node name="Right" type="CollisionShape2D" parent="walls" unique_id=1735707937]
+position = Vector2(528, 128)
+shape = SubResource("RectangleShape2D_yqjtg")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=139938889]
+z_index = -10
+scale = Vector2(2, 2)
+texture = ExtResource("3_4et86")
+centered = false

@@ -1,43 +1,51 @@
 [gd_scene format=3 uid="uid://ifu2lchu8ada"]
 
-[ext_resource type="PackedScene" uid="uid://bd7gfpo2h35w6" path="res://scripts/player.tscn" id="1_uwrxv"]
-[ext_resource type="AudioStream" uid="uid://o5nqoqxdvhou" path="res://assets/tuffmuzyczka.wav" id="2_yqjtg"]
-[ext_resource type="PackedScene" uid="uid://c0kjk4ejuan53" path="res://scripts/sign.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://b2llugsh07f8d" path="res://scenes/door.tscn" id="1_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://bd7gfpo2h35w6" path="res://scenes/player.tscn" id="1_uwrxv"]
+[ext_resource type="PackedScene" uid="uid://c0kjk4ejuan53" path="res://scenes/sign.tscn" id="3_lnu2h"]
+[ext_resource type="Texture2D" uid="uid://c6gm3i2xmt3tc" path="res://assets/Mapa1.png" id="4_lbhrr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ejki1"]
-size = Vector2(640, 40)
+size = Vector2(512, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yqjtg"]
-size = Vector2(40, 480)
+size = Vector2(32, 256)
 
 [node name="game" type="Node2D" unique_id=1854827738]
 
-[node name="CharacterBody2D" parent="." unique_id=1546951291 instance=ExtResource("1_uwrxv")]
-position = Vector2(300, 203)
+[node name="Door" parent="." unique_id=1270175815 instance=ExtResource("1_lbhrr")]
+position = Vector2(504, 128)
+rotation = -0.00079176546
+target_room = "uid://bxcijag4byw5w"
+spawn_position = Vector2(56, 128)
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=587264087]
-stream = ExtResource("2_yqjtg")
-autoplay = true
+[node name="CharacterBody2D" parent="." unique_id=1546951291 instance=ExtResource("1_uwrxv")]
+position = Vector2(480, 220)
 
 [node name="walls" type="StaticBody2D" parent="." unique_id=406262209]
 
 [node name="Top" type="CollisionShape2D" parent="walls" unique_id=909248659]
-position = Vector2(320, 20)
+position = Vector2(256, -16)
 rotation = -0.00079176546
 shape = SubResource("RectangleShape2D_ejki1")
 
 [node name="Bottom" type="CollisionShape2D" parent="walls" unique_id=912510729]
-position = Vector2(320, 460)
+position = Vector2(256, 272)
 shape = SubResource("RectangleShape2D_ejki1")
 
 [node name="Left" type="CollisionShape2D" parent="walls" unique_id=1665826322]
-position = Vector2(20, 240)
-rotation = -0.001583531
+position = Vector2(-16, 128)
 shape = SubResource("RectangleShape2D_yqjtg")
 
 [node name="Right" type="CollisionShape2D" parent="walls" unique_id=1735707937]
-position = Vector2(620, 240)
-rotation = 0.042071443
+position = Vector2(528, 128)
 shape = SubResource("RectangleShape2D_yqjtg")
 
 [node name="Sign" parent="." unique_id=1879635761 instance=ExtResource("3_lnu2h")]
+position = Vector2(120, 180)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=511552028]
+z_index = -10
+scale = Vector2(2, 2)
+texture = ExtResource("4_lbhrr")
+centered = false
