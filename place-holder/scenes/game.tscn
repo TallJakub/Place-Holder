@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bd7gfpo2h35w6" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="PackedScene" uid="uid://c0kjk4ejuan53" path="res://scenes/sign.tscn" id="3_lnu2h"]
 [ext_resource type="Texture2D" uid="uid://c6gm3i2xmt3tc" path="res://assets/Mapa1.png" id="4_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://1f7vdpq4fj6a" path="res://scenes/dummy.tscn" id="5_iywne"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ejki1"]
 size = Vector2(512, 32)
@@ -49,3 +50,6 @@ z_index = -10
 scale = Vector2(2, 2)
 texture = ExtResource("4_lbhrr")
 centered = false
+
+[node name="Dummy" parent="." unique_id=283245189 instance=ExtResource("5_iywne")]
+position = Vector2(340, 128)
