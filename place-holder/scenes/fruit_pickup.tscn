@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://ds5kute7kacnl"]
+
+[ext_resource type="Script" uid="uid://bnkg4aljj4ukg" path="res://scenes/fruit_pickup.gd" id="1_611ep"]
+[ext_resource type="Texture2D" uid="uid://c3upmikyl2gb8" path="res://assets/borufki.png" id="2_hlpb0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8twhp"]
+
+[node name="FruitPickup" type="Area2D" unique_id=1816829498]
+modulate = Color(0.8627451, 0.7019608, 0.13333334, 1)
+script = ExtResource("1_611ep")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2137945937]
+scale = Vector2(0.1, 0.1)
+shape = SubResource("CircleShape2D_8twhp")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1515584302]
+texture = ExtResource("2_hlpb0")

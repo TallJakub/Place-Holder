@@ -75,7 +75,7 @@ func _build_game_over(vp: Vector2) -> void:
 	add_child(overlay)
 
 	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.8)
+	dim.color = Color(0.3, 0, 0, 0.85)
 	dim.size = vp
 	overlay.add_child(dim)
 
@@ -87,9 +87,14 @@ func _build_game_over(vp: Vector2) -> void:
 	title.add_theme_font_size_override("font_size", 40)
 	title.add_theme_color_override("font_color", Color(0.9, 0.1, 0.1))
 	overlay.add_child(title)
-
+	var subtitle := Label.new()
+	subtitle.text = "You were defeated..."
+	subtitle.size = Vector2(vp.x, 24)
+	subtitle.position = Vector2(0, vp.y * 0.48)
+	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	overlay.add_child(subtitle)
 	prompt = Label.new()
-	prompt.text = "Press Z to respawn"
+	prompt.text = "Press Space to respawn"
 	prompt.size = Vector2(vp.x, 24)
 	prompt.position = Vector2(0, vp.y * 0.62)
 	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

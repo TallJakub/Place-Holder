@@ -1,12 +1,17 @@
 extends CharacterBody2D
 
-@export var speed: float = 100.0
+@export var speed: float = 150.0
 @export var attack_damage: int = 1
 
 var facing := Vector2.DOWN
 var attacking := false
 var invulnerable := false
 var knockback := Vector2.ZERO
+
+# Temporary power-up (fruit) state
+var speed_mult := 1.0
+var bonus_damage := 0
+var boost_tween: Tween
 
 var hitbox: Area2D
 var swing_visual: ColorRect
@@ -26,14 +31,14 @@ func _setup_hitbox() -> void:
 
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
-	rect.size = Vector2(36, 36)
+	rect.size = Vector2(64, 64)
 	shape.shape = rect
 	hitbox.add_child(shape)
 
 	swing_visual = ColorRect.new()
 	swing_visual.color = Color(1, 1, 1, 0.5)
-	swing_visual.size = Vector2(36, 36)
-	swing_visual.position = Vector2(-18, -18)
+	swing_visual.size = Vector2(64, 64)
+	swing_visual.position = Vector2(-32, -32)
 	swing_visual.visible = false
 	hitbox.add_child(swing_visual)
 
@@ -49,7 +54,7 @@ func _physics_process(delta: float) -> void:
 			facing = Vector2(sign(direction.x), 0)
 		else:
 			facing = Vector2(0, sign(direction.y))
-	velocity = direction * speed + knockback
+	velocity = direction * speed * speed_mult + knockback
 	knockback = knockback.move_toward(Vector2.ZERO, 700.0 * delta)
 	move_and_slide()
 
@@ -61,7 +66,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func attack() -> void:
 	attacking = true
-	hitbox.position = facing * 28
+	hitbox.position = facing * 36
 	swing_visual.visible = true
 	hitbox.set_deferred("monitoring", true)
 
@@ -77,7 +82,7 @@ func _end_swing() -> void:
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies") and body.has_method("take_damage"):
-		body.take_damage(attack_damage, global_position)
+		body.take_damage(attack_damage + bonus_damage, global_position)
 
 func take_damage(amount: int, from_position: Vector2) -> void:
 	if invulnerable or GameState.dead:
@@ -96,3 +101,19 @@ func take_damage(amount: int, from_position: Vector2) -> void:
 func _end_invulnerable() -> void:
 	sprite.modulate = Color.WHITE
 	invulnerable = false
+
+func apply_power_up(new_speed_mult: float, new_bonus_damage: int, duration: float) -> void:
+	speed_mult = new_speed_mult
+	bonus_damage = new_bonus_damage
+	modulate = Color(1.0, 0.85, 0.4)  # gold glow
+
+	if boost_tween:
+		boost_tween.kill()  # picking up a second fruit restarts the timer
+	boost_tween = create_tween()
+	boost_tween.tween_interval(duration)
+	boost_tween.tween_callback(_end_power_up)
+
+func _end_power_up() -> void:
+	speed_mult = 1.0
+	bonus_damage = 0
+	modulate = Color.WHITE

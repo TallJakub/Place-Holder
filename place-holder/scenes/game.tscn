@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://c0kjk4ejuan53" path="res://scripts/sign.tscn" id="3_lnu2h"]
 [ext_resource type="Texture2D" uid="uid://c6gm3i2xmt3tc" path="res://assets/Mapa1.png" id="4_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://1f7vdpq4fj6a" path="res://scenes/dummy.tscn" id="5_iywne"]
+[ext_resource type="PackedScene" uid="uid://ds5kute7kacnl" path="res://scenes/fruit_pickup.tscn" id="6_p57ef"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ejki1"]
 size = Vector2(512, 32)
@@ -57,3 +58,7 @@ centered = false
 
 [node name="Dummy" parent="." unique_id=283245189 instance=ExtResource("5_iywne")]
 position = Vector2(340, 128)
+
+[node name="FruitPickup" parent="." unique_id=1816829498 instance=ExtResource("6_p57ef")]
+position = Vector2(331, 214)
+scale = Vector2(0.1, 0.1)
