@@ -8,7 +8,7 @@ extends CharacterBody2D
 @export var chase_speed: float = 45.0
 @export var aggro_range: float = 140.0
 @export var attack_range: float = 34.0
-@export var contact_damage: int = 1
+@export var contact_damage: int = 10  # player has 100 HP now
 @export var attack_cooldown: float = 1.0
 
 const BAR_WIDTH := 28.0

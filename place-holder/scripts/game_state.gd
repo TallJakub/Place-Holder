@@ -1,13 +1,28 @@
 extends CanvasLayer
 
-var max_hp: int = 5
-var hp: int = 5
+var max_hp: int = 100
+var hp: int = 100
 var dead := false
 var can_respawn := false
 
-# Where you come back after dying. This uid is your first room (game.tscn).
-var respawn_room := "uid://ifu2lchu8ada"
-var respawn_position := Vector2(256, 128)
+# Where you come back after dying: the first story room (UC_05, kurnik).
+var respawn_room := "res://scenes/rooms/kurnik.tscn"
+var respawn_position := Vector2(90, 190)
+
+# Story progress (reset by reset() when a new game starts)
+var tongue_learned := false   # UC_08: first apple teaches the tongue
+var gills := false            # UC_09: R pressed, can breathe underwater
+var apples_collected := 0
+
+# UC_12: "sanity" bar, shown after the skeleton on the lake floor was found.
+# Below SANITY_LOW percent the player slowly loses HP.
+const SANITY_LOW := 20.0
+const SANITY_DRAIN := 0.5      # percent per second
+var sanity := 100.0
+var sanity_enabled := false
+var sanity_hurt_timer := 0.0
+var sanity_root: Control
+var sanity_fill: ColorRect
 
 const BAR_W := 100.0
 const BAR_H := 14.0
@@ -24,6 +39,7 @@ func _ready() -> void:
 	var vp := get_viewport().get_visible_rect().size
 	_build_bar(vp)
 	_build_game_over(vp)
+	_build_sanity_bar(vp)
 
 func _style_label(label: Label, size: int) -> void:
 	label.add_theme_font_size_override("font_size", size)
@@ -147,6 +163,8 @@ func _respawn() -> void:
 	if prompt_tween:
 		prompt_tween.kill()
 	hp = max_hp
+	sanity = 100.0
+	_update_sanity_bar()
 	_update_bar()
 	var t := create_tween()
 	t.tween_property(overlay, "modulate:a", 0.0, 0.25)
@@ -154,3 +172,78 @@ func _respawn() -> void:
 	await t.finished
 	overlay.visible = false
 	dead = false
+
+func heal(amount: int) -> void:
+	if dead:
+		return
+	hp = mini(hp + amount, max_hp)
+	_update_bar()
+
+# New game from the menu: forget all progress.
+func reset() -> void:
+	if prompt_tween:
+		prompt_tween.kill()
+	dead = false
+	can_respawn = false
+	overlay.visible = false
+	hp = max_hp
+	tongue_learned = false
+	gills = false
+	apples_collected = 0
+	sanity = 100.0
+	sanity_enabled = false
+	sanity_root.visible = false
+	_update_bar(false)
+
+func enable_sanity() -> void:
+	sanity_enabled = true
+	sanity_root.visible = true
+	_update_sanity_bar()
+
+func _build_sanity_bar(vp: Vector2) -> void:
+	sanity_root = Control.new()
+	sanity_root.visible = false
+	add_child(sanity_root)
+
+	var x := vp.x - BAR_W - 12.0
+	var y := vp.y - BAR_H - 10.0
+
+	var tag := Label.new()
+	tag.text = "SANITY"
+	tag.position = Vector2(x - 56, y - 2)
+	_style_label(tag, 11)
+	sanity_root.add_child(tag)
+
+	var border := ColorRect.new()
+	border.color = Color.WHITE
+	border.position = Vector2(x, y)
+	border.size = Vector2(BAR_W, BAR_H)
+	sanity_root.add_child(border)
+
+	var inner := ColorRect.new()
+	inner.color = Color(0.1, 0.1, 0.1)
+	inner.position = Vector2(2, 2)
+	inner.size = Vector2(BAR_W - 4, BAR_H - 4)
+	border.add_child(inner)
+
+	sanity_fill = ColorRect.new()
+	sanity_fill.position = Vector2(2, 2)
+	sanity_fill.size = Vector2(BAR_W - 4, BAR_H - 4)
+	border.add_child(sanity_fill)
+
+func _update_sanity_bar() -> void:
+	if sanity_fill == null:
+		return
+	sanity_fill.size.x = (BAR_W - 4.0) * clampf(sanity / 100.0, 0.0, 1.0)
+	sanity_fill.color = Color(0.9, 0.2, 0.2) if sanity < SANITY_LOW else Color(0.6, 0.4, 0.95)
+
+func _process(delta: float) -> void:
+	if not sanity_enabled or dead:
+		return
+	sanity = maxf(sanity - SANITY_DRAIN * delta, 0.0)
+	_update_sanity_bar()
+	if sanity < SANITY_LOW:
+		sanity_hurt_timer += delta
+		if sanity_hurt_timer >= 2.0:
+			sanity_hurt_timer = 0.0
+			damage(1)
