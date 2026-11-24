@@ -1,5 +1,8 @@
 extends CanvasLayer
 
+# Emitted when the last line was dismissed (used with `await DialogueBox.closed`).
+signal closed
+
 var is_open := false
 var lines: Array = []
 var line_index := 0
@@ -58,5 +61,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			if line_index >= lines.size():
 				is_open = false
 				panel.visible = false
+				closed.emit()
 			else:
 				_show_line()
